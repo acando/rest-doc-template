@@ -1,8 +1,12 @@
 För att skapa om sector alarm apiet's dokumentation, behöver html versionen genereras utifrån den xmlfil där apiet defineras.
+
 (Du behöver ha ant)
+
 Kör följande target:
 
-ant xhtml_acando -Dapidir=sector -Dapiname=sector-app-api
+ant xhtml_acando -Dapidir=..\sector-alarm\doc\api -Dapiname=sector-app-api -Dtargetdir=..\sector-alarm\doc\api
+
+(apidir & targetdir bör peka på api dokumentationens katalog i sector-alarm git hub projektet)
 
 så skall det skapas om i output katalogen.
 

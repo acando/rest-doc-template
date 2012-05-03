@@ -6,7 +6,7 @@
 	<property name="apidir" value="template" />
 	<property name="apiname" value="template" />
 
-	<property name="output" location="output" />
+	<property name="output" location="${targetdir}" />
 	<property name="source" location="${apidir}" />
 	<property name="lib" location="lib" />
 	<property name="tmp" location="tmp" />
@@ -14,7 +14,7 @@
 
 	<target name="init">
 		<tstamp />
-		<mkdir dir="${output}" />
+		
 		<mkdir dir="${tmp}" />
 	</target>
 
@@ -33,13 +33,17 @@
 	</target>
 
 	<target name="xhtml_acando" depends="init">
-		<xslt in="${source}/${apiname}.xml" out="${output}/${apidir}/${apiname}.html" style="xsl/xhtml_acando.xsl">
+		<xslt in="${source}/${apiname}.xml" out="${output}/${apiname}.html" style="xsl/xhtml_acando.xsl">
 		</xslt>
-		<copy todir="${output}/${apidir}">
+		<!-- copy dependencies to same dir (css/js) -->
+		<copy todir="${output}">
 			<fileset dir="html_src">
       
 			</fileset>
 		</copy>
+
+		
+			
 	</target>
 	
 	<target name="tex" depends="init">
