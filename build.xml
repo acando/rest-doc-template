@@ -32,6 +32,16 @@
 		</xslt>
 	</target>
 
+	<target name="xhtml_acando" depends="init">
+		<xslt in="${source}/${apiname}.xml" out="${output}/${apidir}/${apiname}.html" style="xsl/xhtml_acando.xsl">
+		</xslt>
+		<copy todir="${output}/${apidir}">
+			<fileset dir="html_src">
+      
+			</fileset>
+		</copy>
+	</target>
+	
 	<target name="tex" depends="init">
 		<xslt in="${source}/${apiname}.xml" out="${tmp}/${apiname}.tex" style="xsl/latex.xsl">
 			<outputproperty name="omit-xml-declaration" value="yes" />

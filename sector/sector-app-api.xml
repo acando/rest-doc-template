@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<api xmlns="http://www.ioexception.de/rest-api-doc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.ioexception.de/rest-api-doc ../xsd/rest-api-doc.xsd ">
+	<name>Sector Alarm App API</name>
+	<version>v1</version>
+	<author>Acando AB</author>
+	<description>Detta dokument beskriver api formatet för app klienter i det mobila säljastödsverktyget Hermes.
+	
+	Grundläggande regler: 
+	
+	Alla datum/tidsvärden skall uttryckas i ISO8061 (extended) i UTC dvs YYYY-MM-DDTHH:MM:SSZ, ex "2012-05-10T20:42:21Z"
+	Alla requests/responses skall kodas i UTF-8.
+	</description>
+	<baseuri>http://hermes.sectoralarm.com/api/v1</baseuri>
+	<authentication>
+		<type>Custom Token</type>
+		<type>Custom</type>
+	</authentication>
+	<resources>	
+					
+		<resource>
+			<name>Auth</name>
+			<description>Denna resurs beskriver entiteten Auth. </description>
+			<path>/auth/<param description="Employee number">empNo</param></path>
+			<operation>
+				<name>Begäran av ny access token för en användare</name>
+				<description>Autentisering och skapande av ny access token.</description>
+				<path>/RequestAccessToken</path>
+				<formats><format>application/json</format></formats>
+				<request>
+					<method>POST</method>
+					<authentication  mandatory="false" />
+					<entities>
+						<entity>
+							<code language="js">
+					<![CDATA[{
+						 "password" : "s3cret"
+					}]]></code>
+						</entity>						
+					</entities>
+				</request>
+				<response>
+					<responses>
+						<answer code="200">Autentisering lyckades, Access token finns i svaret.</answer>
+						<answer code="400">Autentisering misslyckades/annat fel</answer>
+						<answer code="500">Tekniskt fel</answer>
+					</responses>
+					<entities >
+						<entity>
+							<code language="js">
+						<![CDATA[
+
+						{
+								  "meta": {
+									"code": 200,
+									 ...errorType and errorDetail... (optional)
+								  },
+								  "notifications": {
+									 ...notifications... (optional)
+								  },
+								  "response": {
+									 accessToken: "4ac3-04f2-b4e2-09f1-ee77"
+								  }
+								}
+
+						]]></code>
+							<description></description>
+						</entity>
+					</entities>					
+				</response>
+			</operation>	
+		</resource>
+		
+		<resource>
+			<name>Event</name>
+			<description>Denna resurs beskriver entiteten Event som motsvarar Entiteten Event i datamodellen. </description>
+			<path>/event</path>
+			<operation>
+				<name>Logga nytt event på adress</name>
+				<description>Skapar nya event log poster för lista av events</description>
+				<path>/CreateEvent</path>
+				<formats><format>application/json</format></formats>
+				<request>
+					<method>POST</method>
+					<authentication  mandatory="true" />
+					<entities>
+						<entity>
+							<code language="js">
+					<![CDATA[{
+						 "accessToken" : "4ac3-04f2-b4e2-09f1-ee77",
+						 "events" : [ 
+							{
+								"timestamp": "2012-05-10T20:42:21Z",
+								"eventToken": "1ac3-77f2-b9e2-99f1-3e3a",
+								"eventType": "NOTE",
+								"comment": "Nyinflytt hade securitas i gamla villan, återkom 6 m",
+								"name" : "Roger Friberg",
+								"phone": "0522-123411",
+								"address" : {
+									"streetName": "Götgatan",
+									"streetNumber" : "12",
+									"streetLetter" : "",
+									"zipCode" :"631 72",
+									"city": "Växjö",
+									"country": "SE"
+								}
+							},
+							{
+								"timestamp": "2012-05-10T20:48:18Z",
+								"eventToken": "5ac3-73f2-51e2-b9f1-87f4",
+								"eventType": "BOOKING",
+								"comment": "Vill se villkorsbilaga",
+								"name" : "Nils Hansson",
+								"phone": "0522-654554",
+								"address" : {
+									"streetName": "Norrhagagatan",
+									"streetNumber" : "7",
+									"streetLetter" : "C",
+									"zipCode" :"631 71",
+									"city": "Växjö",
+									"country": "SE"
+								}
+							},
+									{
+								"timestamp": "2012-05-10T20:38:44Z",
+								"eventToken": "1238-a032-73f2-51e2-09ee",
+								"eventType": "RETURN_LATER",
+								"comment": "",
+								"name" : "",
+								"phone": "",
+								"address" : {
+									"streetName": "Norrhagagatan",
+									"streetNumber" : "7",
+									"streetLetter" : "D",
+									"zipCode" :"631 71",
+									"city": "Växjö",
+									"country": "SE"
+								}
+							},
+							...							
+						 ]
+					}]]></code>
+						</entity>						
+					</entities>
+				</request>
+				<response>
+					<responses>
+						<answer code="200">Autentisering lyckades, Access token finns i svaret.</answer>
+						<answer code="400">Autentisering misslyckades/annat fel</answer>
+						<answer code="500">Tekniskt fel</answer>
+					</responses>
+					<entities >
+						<entity>
+							<code language="js">
+						<![CDATA[
+
+						{
+								  "meta": {
+									"code": 200,
+									 ...errorType and errorDetail... (optional)
+								  },
+								  "notifications": {
+									 ...notifications... (optional)
+								  },
+								  "response": {
+									 "events" : [ 
+										{
+											"eventToken": "1ac3-77f2-b9e2-99f1-3e3a",
+											"result": "1"
+										},
+										{
+											"eventToken": "5ac3-73f2-51e2-b9f1-87f4",
+											"result": "1"
+										},
+										{
+											"eventToken": "1238-a032-73f2-51e2-09ee",
+											"result": "1"
+										},
+										...							
+								  }
+								}
+
+						]]></code>
+							<description></description>
+						</entity>
+					</entities>					
+				</response>
+			</operation>	
+		</resource>
+	</resources>
+</api>
